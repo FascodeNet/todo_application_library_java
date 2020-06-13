@@ -3,11 +3,11 @@ plugins {
     id 'groovy'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'maven'
-
+    id 'application'
 }
 group 'net.fascode.todo_application'
 version '0.0.1'
-
+mainClassName = 'net.fascode.todo_application.library.main.Main'
 repositories {
     mavenCentral()
 }
