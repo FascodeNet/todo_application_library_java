@@ -11,6 +11,12 @@ version '0.0.1'
 repositories {
     mavenCentral()
 }
+def defaultEncoding = 'UTF-8'
+tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
+
+compileTestJava {
+    options.encoding = defaultEncoding
+}
 dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20200518'

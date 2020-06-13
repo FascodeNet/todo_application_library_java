@@ -25,3 +25,5 @@ hs_err_pid*
 build/
 # idea file
 .idea/
+# test dir
+.todo/
