@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import javax.smartcardio.Card;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
@@ -79,7 +80,30 @@ public class Project_DB_JSON {
             bokun.write(buf,0,n);
             n=bufferedInputStream.read(buf);
         }
-        return bokun.toString();
+        return bokun.toString("UTF-8");
+    }
+    private static void write_str(File wrf,String outstr)  {
+        FileOutputStream fos=null;
+        BufferedOutputStream bos=null;
+        try {
+            fos = new FileOutputStream(wrf);
+            bos = new BufferedOutputStream(fos);
+            bos.write(outstr.getBytes(StandardCharsets.UTF_8));
+        }catch (IOException e){
+            //nothing todo;
+        }finally {
+            try {
+                bos.close();
+            }catch (IOException e){
+                //nothing
+            }
+            try {
+                fos.close();
+            }catch (IOException e){
+                //nothing
+            }
+        }
+
     }
     /**
      *
@@ -141,13 +165,8 @@ public class Project_DB_JSON {
         }
         root_object.put("cards",jsonArray);
         File proj_file=CustomFile.get_File(pdb.project_id + File.separator + "project_meta.json",Branch_Name);
-        try{
-            FileWriter fwkun=new FileWriter(proj_file);
-            fwkun.write(root_object.toString());
-            fwkun.close();
-        }catch (IOException e){
 
-        }
+        write_str(proj_file,root_object.toString());
     }
     private void cards_to_file(Card_Database cdb,JSONArray jsonArray){
         jsonArray.put(cdb.Card_id);
@@ -156,12 +175,7 @@ public class Project_DB_JSON {
         JSONObject jo=new JSONObject();
         jo.put("cards",cards);
         File cardFile= CustomFile.get_File(pdb.project_id + File.separator + "cards" + File.separator + cdb.Card_id + ".json",Branch_Name);
-        try {
-            FileWriter fwkun = new FileWriter(cardFile);
-            fwkun.write(jo.toString());
-            fwkun.close();
-        }catch (IOException e){
-        }
+        write_str(cardFile,jo.toString());
     }
     private void recursive_list_to_json(JSONArray jarray, Card_Database cdb){
         JSONObject card_obj_j=new JSONObject();

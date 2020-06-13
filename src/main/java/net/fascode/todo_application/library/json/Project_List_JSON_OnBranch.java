@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,15 +64,32 @@ public class Project_List_JSON_OnBranch {
             jarray.put(ch_jo);
         }
         root_obj.put("projects",jarray);
-        try{
-            FileWriter fwkun=new FileWriter(branch_setting_file);
-            fwkun.write(root_obj.toString());
-            fwkun.close();
-        }catch (IOException e){
-            //nothing todo
-        }
+        FileWriter fwkun=null;
+        write_str(branch_setting_file,root_obj.toString());
     }
+    private static void write_str(File wrf,String outstr)  {
+        FileOutputStream fos=null;
+        BufferedOutputStream bos=null;
+        try {
+            fos = new FileOutputStream(wrf);
+            bos = new BufferedOutputStream(fos);
+            bos.write(outstr.getBytes(StandardCharsets.UTF_8));
+        }catch (IOException e){
+            //nothing todo;
+        }finally {
+            try {
+                bos.close();
+            }catch (IOException e){
+                //nothing
+            }
+            try {
+                fos.close();
+            }catch (IOException e){
+                //nothing
+            }
+        }
 
+    }
     private static String readAll(File fkun)throws IOException {
         FileInputStream fileInputStream=new FileInputStream(fkun);
         BufferedInputStream bufferedInputStream=new BufferedInputStream(fileInputStream);
@@ -82,6 +101,6 @@ public class Project_List_JSON_OnBranch {
             n=bufferedInputStream.read(buf);
         }
         fileInputStream.close();
-        return bokun.toString();
+        return bokun.toString("UTF-8");
     }
 }

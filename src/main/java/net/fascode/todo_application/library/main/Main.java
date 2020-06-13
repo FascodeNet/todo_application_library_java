@@ -18,7 +18,7 @@ public class Main {
                                 new Card_Database("testkun","T E S T")
                         ))),
                 new Card_Database("tets_TDN","T EST")))));
-        Card_Database cdkun=new Card_Database("aiueo","# HOGE");
+        Card_Database cdkun=new Card_Database("aiueo","# やりますねぇ");
         cr.Create_Card(cdkun);
         cr.Create_Card(new Card_Database("TEST25t","HOGEAIUEO"),cdkun);
         cr.edit_Card(new Card_Database("TEST25t","AIUEO810"),cdkun.children.get(0).Card_id,cdkun);

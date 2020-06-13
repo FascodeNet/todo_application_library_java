@@ -27,7 +27,7 @@ public class core_test {
                         new ArrayList<>(Arrays.asList(
                                 new Card_Database("testkun","T E S T")
                         ))),
-                new Card_Database("tets_TDN","T EST")))));
+                new Card_Database("tets_TDN","やりますねぇ")))));
         Card_Database cdkun=new Card_Database("aiueo","# HOGE");
         cr.Create_Card(cdkun);
         cr.Create_Card(new Card_Database("TEST25t","HOGEAIUEO"),cdkun);
