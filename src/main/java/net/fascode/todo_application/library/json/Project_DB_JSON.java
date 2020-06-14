@@ -26,7 +26,6 @@ public class Project_DB_JSON {
      */
     public Project_DB_JSON(Project_Database pdb_,String Branch_name) {
         pdb = pdb_;
-        System.out.println(pdb_.project_id);
         Branch_Name = Branch_name;
 
     }
@@ -38,7 +37,7 @@ public class Project_DB_JSON {
             JSONObject root_JO = new JSONObject(readAll(Project_meta_Json));
             pdb.project_id=root_JO.getString("project_id");
             pdb.project_title=root_JO.getString("project_title");
-            JSONObject cardskun=root_JO.getJSONObject("cards");
+            /*JSONObject cardskun=root_JO.getJSONObject("cards");
             for(String key:cardskun.keySet()){
                 JSONObject jo2=cardskun.getJSONObject(key);
                 Card_Database cdbkun=new Card_Database();
@@ -46,9 +45,34 @@ public class Project_DB_JSON {
                 cdbkun.Card_name=jo2.getString("name");
                 cdbkun.mark_data=jo2.getString("mark_data");
                 pdb.cards.put(key,cdbkun);
-            }
+            }*/
+            JSONArray cardsfile=root_JO.getJSONArray("cards_file");
+
+            cardsfile.forEach(strkun->{
+                File fkunniki=CustomFile.get_File(Project_ID + File.separator + "cards" + File.separator + strkun + ".json",Branch_Name);
+                try{
+                    String jsonniki=readAll(fkunniki);
+                    JSONObject jo22=new JSONObject(jsonniki);
+                    JSONObject jo_cards=jo22.getJSONObject("cards");
+                    Map<String,Card_Database> cdb4_map=new HashMap<>();
+                    for(String jofv_key:jo_cards.keySet()){
+                        JSONObject jofdf=jo_cards.getJSONObject(jofv_key);
+                        Card_Database cdbniki=new Card_Database();
+                        cdbniki.isremoved=jofdf.getBoolean("isremoved");
+                        cdbniki.mark_data=jofdf.getString("mark_data");
+                        cdbniki.Card_name=jofdf.getString("name");
+                        cdbniki.parent_id=jofdf.getString("parent");
+                        cdb4_map.put(jofv_key,cdbniki);
+                    }
+                    pdb.cards= new HashMap<>(cdb4_map);
+                }catch (IOException e){
+                    //nothing
+                    System.err.println(e.toString());
+                }
+            });
         }catch (IOException e){
             //nothing
+            System.err.println(e.toString());
         }
     }
     private static String readAll(File fkun)throws IOException{
@@ -143,9 +167,50 @@ public class Project_DB_JSON {
             joude.put("name",cdb2f.Card_name);
             joude.put("parent",cdb2f.parent_id);
             joude.put("mark_data",cdb2f.mark_data);
+            joude.put("isremoved",cdb2f.isremoved);
             jomap.put(key,joude);
         }
-        root_object.put("cards",jomap);
+        //root_object.put("cards",jomap);
+        ArrayList<String> cards_datafile=new ArrayList<>();
+        int jomap_maxsize=500;
+        ArrayList<Map<String,JSONObject>> jomap_array=new ArrayList<>();
+        int count_niki=0;
+        int count_2=0;
+        /*System.out.println(jomap.size());
+        System.out.println("Start");*/
+        Map<String,JSONObject> tempkun=new HashMap<>();
+
+        for(String keykun:jomap.keySet()){
+
+            if(count_niki < jomap_maxsize ){
+                tempkun.put(keykun,jomap.get(keykun));
+                count_niki++;
+            }else{
+                jomap_array.add(new HashMap<>(tempkun));
+                tempkun=new HashMap<>();
+                tempkun.put(keykun,jomap.get(keykun));
+                count_2++;
+                count_niki=1;
+            }
+//            /System.out.println("niki:" + count_niki + "\n2:" + count_2);
+        }
+        /*System.out.println("End");
+        System.out.println(jomap_array.size());*/
+
+        jomap_array.add(new HashMap<>(tempkun));
+
+        //System.out.println(jomap_array.size());
+        File cards_dir=CustomFile.get_File(pdb.project_id + File.separator + "cards",Branch_Name);
+        if(!cards_dir.exists()) Files.createDirectories(cards_dir.toPath());
+        File card_filekun;
+        for(int i=0;i<jomap_array.size();i++){
+            card_filekun=CustomFile.get_File(pdb.project_id + File.separator + "cards" + File.separator + "card-" + Integer.toString(i) + ".json",Branch_Name);
+            JSONObject jonikihad=new JSONObject();
+            jonikihad.put("cards",jomap_array.get(i));
+            write_str(card_filekun,jonikihad.toString());
+            cards_datafile.add("card-" + i);
+        }
+        root_object.put("cards_file",new JSONArray(cards_datafile));
         File proj_file=CustomFile.get_File(pdb.project_id + File.separator + "project_meta.json",Branch_Name);
         if(!proj_file.getParentFile().exists()){
             Files.createDirectories(proj_file.getParentFile().toPath());

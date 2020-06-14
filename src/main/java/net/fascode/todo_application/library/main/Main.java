@@ -32,10 +32,11 @@ public class Main {
         System.out.println(cr.to_JSONString());
         core cr2=new core();
         cr2.load_project_Name("testkun621","hoge");
-        /*Card_Database cdfrt = cr2.pdj.pdb.cards.get(0);
-        cr2.edit_Card(new Card_Database("AIUE0","TESTGGGG",cdfrt.children),cdfrt.Card_id);
-        */
+
         cr2.Create_Card(new Card_Database("hoge","TDN"));
+        cr2.Create_Card(new Card_Database("hogre","TfDN"));
+        cr2.Create_Card(new Card_Database("hogree","TDNa"));
+
         cr2.save_project();
         System.out.println("dest");
         System.out.println(cr2.to_JSONString());

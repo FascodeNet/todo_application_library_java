@@ -9,12 +9,16 @@ public class Card_Database {
     public String Card_name;
     public String mark_data;
     public String parent_id;
+    public boolean isremoved;
+    public boolean isopened;
     public boolean error;
     public Card_Database(){
         Card_name="";
         mark_data="";
         parent_id="";
+        isremoved=false;
         error=false;
+        isopened=false;
     }
 
     /**
@@ -26,8 +30,10 @@ public class Card_Database {
 
         Card_name=Card_n;
         mark_data=mark_d;
-        parent_id="root";
+        parent_id="_root";
+        isremoved=false;
         error=false;
+        isopened=false;
     }
 
     /**
@@ -41,7 +47,9 @@ public class Card_Database {
         Card_name=Card_n;
         mark_data=mark_d;
         this.parent_id=parent_id;
+        isremoved=false;
         error=false;
+        isopened=false;
     }
     /*public Card_Database get_child(String Card_Name){
         for(Card_Database cdkun: children){
