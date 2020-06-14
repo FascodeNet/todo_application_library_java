@@ -8,14 +8,12 @@ import java.util.ArrayList;
 public class Card_Database {
     public String Card_name;
     public String mark_data;
-    public String Card_id;
-    public ArrayList<Card_Database> children;
+    public String parent_id;
     public boolean error;
     public Card_Database(){
         Card_name="";
         mark_data="";
-        Card_id="";
-        children=new ArrayList<Card_Database>();
+        parent_id="";
         error=false;
     }
 
@@ -28,8 +26,7 @@ public class Card_Database {
 
         Card_name=Card_n;
         mark_data=mark_d;
-        Card_id=DigestUtils.md5Hex(Card_n + Long.toString(System.currentTimeMillis()));
-        children=new ArrayList<Card_Database>();
+        parent_id="root";
         error=false;
     }
 
@@ -37,17 +34,16 @@ public class Card_Database {
      * 派生コンストラクタ
      * @param Card_n カード名
      * @param mark_d カードデータ
-     * @param cl カードリスト
+     * @param parent_id 親id
      */
-    public Card_Database(String Card_n,String mark_d,ArrayList<Card_Database> cl){
+    public Card_Database(String Card_n,String mark_d,String parent_id){
 
         Card_name=Card_n;
         mark_data=mark_d;
-        Card_id= DigestUtils.md5Hex(Card_n + Long.toString(System.currentTimeMillis()));
-        children=cl;
+        this.parent_id=parent_id;
         error=false;
     }
-    public Card_Database get_child(String Card_Name){
+    /*public Card_Database get_child(String Card_Name){
         for(Card_Database cdkun: children){
             if(cdkun.Card_name.equals(Card_Name)){
                 return cdkun;
@@ -56,5 +52,5 @@ public class Card_Database {
         Card_Database cd2=new Card_Database();
         cd2.error=true;
         return cd2;
-    }
+    }*/
 }

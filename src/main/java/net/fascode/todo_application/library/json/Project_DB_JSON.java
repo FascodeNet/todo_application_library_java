@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Project_DB_JSON {
     private JSONObject root_object;
@@ -24,6 +26,7 @@ public class Project_DB_JSON {
      */
     public Project_DB_JSON(Project_Database pdb_,String Branch_name) {
         pdb = pdb_;
+        System.out.println(pdb_.project_id);
         Branch_Name = Branch_name;
 
     }
@@ -35,40 +38,18 @@ public class Project_DB_JSON {
             JSONObject root_JO = new JSONObject(readAll(Project_meta_Json));
             pdb.project_id=root_JO.getString("project_id");
             pdb.project_title=root_JO.getString("project_title");
-            JSONArray jarray_S=root_JO.getJSONArray("cards");
-            jarray_S.forEach(cardname_o->{
-                String CardName_Str=(String)cardname_o;
-                File Card_kun= CustomFile.get_File(Project_ID + File.separator + "cards" + File.separator + CardName_Str + ".json",Branch_Name);
-                try {
-                    String Card_JS=readAll(Card_kun);
-                    JSONObject card_jo=new JSONObject(Card_JS);
-                    JSONArray jakun2=card_jo.getJSONArray("cards");
-                    jakun2.forEach(jo2->{
-                        Card_Database cdbkun=new Card_Database();
-                        JSONObject cokun=(JSONObject)jo2;
-                        parse_card_js(cokun,cdbkun);
-                        pdb.cards.add(cdbkun);
-                    });
-                } catch (IOException e) {
-                    //nothing do
-                }
-
-            });
+            JSONObject cardskun=root_JO.getJSONObject("cards");
+            for(String key:cardskun.keySet()){
+                JSONObject jo2=cardskun.getJSONObject(key);
+                Card_Database cdbkun=new Card_Database();
+                cdbkun.parent_id=jo2.getString("parent");
+                cdbkun.Card_name=jo2.getString("name");
+                cdbkun.mark_data=jo2.getString("mark_data");
+                pdb.cards.put(key,cdbkun);
+            }
         }catch (IOException e){
             //nothing
         }
-    }
-    private void parse_card_js(JSONObject jsonObject,Card_Database cdb){
-        cdb.Card_id=jsonObject.getString("card_id");
-        cdb.Card_name=jsonObject.getString("name");
-        cdb.mark_data=jsonObject.getString("mark_data");
-        JSONArray jakun=jsonObject.getJSONArray("children");
-        jakun.forEach(jokun->{
-            JSONObject jobj=(JSONObject)jokun;
-            Card_Database cdkun=new Card_Database();
-            parse_card_js(jobj,cdkun);
-            cdb.children.add(cdkun);
-        });
     }
     private static String readAll(File fkun)throws IOException{
         FileInputStream fileInputStream=new FileInputStream(fkun);
@@ -114,38 +95,33 @@ public class Project_DB_JSON {
         JSONObject jo=new JSONObject(json_data);
         pdb.project_id=jo.getString("project_id");
         pdb.project_title=jo.getString("project_title");
-        JSONArray jarray=jo.getJSONArray("cards");
-        jarray.forEach(joObj -> {
-            JSONObject jokun=(JSONObject)joObj;
-            Card_Database cdb=new Card_Database();
-            Json_parse_card(jokun,cdb);
-            pdb.cards.add(cdb);
-        });
-
-    }
-    private void Json_parse_card(JSONObject jobject,Card_Database cdb){
-        cdb.mark_data=jobject.getString("mark_data");
-        cdb.Card_name=jobject.getString("name");
-        cdb.Card_id=jobject.getString("card_id");
-        JSONArray jarray=jobject.getJSONArray("children");
-        jarray.forEach(joObj->{
-
-            JSONObject jokun=(JSONObject)joObj;
+        JSONObject cardskun=jo.getJSONObject("cards");
+        for(String key:cardskun.keySet()){
+            JSONObject jo2=cardskun.getJSONObject(key);
             Card_Database cdbkun=new Card_Database();
-            Json_parse_card(jokun,cdbkun);
-            cdb.children.add(cdbkun);
-        });
+            cdbkun.parent_id=jo2.getString("parent");
+            cdbkun.Card_name=jo2.getString("name");
+            cdbkun.mark_data=jo2.getString("mark_data");
+            pdb.cards.put(key,cdbkun);
+        }
+
     }
     public String To_JsonString(){
 
         root_object=new JSONObject();
         root_object.put("project_title",pdb.project_title);
         root_object.put("project_id",pdb.project_id);
-        JSONArray jsonArray=new JSONArray();
-        for(Card_Database cdb:pdb.cards){
-            recursive_list_to_json(jsonArray,cdb);
+        Card_Database cdkun;
+        Map<String,JSONObject> jo_map=new HashMap<>();
+        for(String key:pdb.cards.keySet()){
+            JSONObject jokun=new JSONObject();
+            cdkun=pdb.cards.get(key);
+            jokun.put("name",cdkun.Card_name);
+            jokun.put("mark_data",cdkun.mark_data);
+            jokun.put("parent",cdkun.parent_id);
+            jo_map.put(key,jokun);
         }
-        root_object.put("cards",jsonArray);
+        root_object.put("cards",jo_map);
         return root_object.toString();
     }
     public void  Write_JsonString() throws IOException {
@@ -155,38 +131,25 @@ public class Project_DB_JSON {
         if(!CustomFile.get_File(pdb.project_id,Branch_Name).exists()){
             Files.createDirectories(Paths.get(CustomFile.get_File(pdb.project_id,Branch_Name).toURI()));
         }
-
-        JSONArray jsonArray=new JSONArray();
-        if(!CustomFile.get_File(pdb.project_id + File.separator + "cards",Branch_Name).exists()){
-            Files.createDirectories(Paths.get(CustomFile.get_File(pdb.project_id+ File.separator + "cards",Branch_Name).toURI()));
-        }
+        /*
         for(Card_Database cdb:pdb.cards){
             cards_to_file(cdb,jsonArray);
         }
-        root_object.put("cards",jsonArray);
-        File proj_file=CustomFile.get_File(pdb.project_id + File.separator + "project_meta.json",Branch_Name);
-
-        write_str(proj_file,root_object.toString());
-    }
-    private void cards_to_file(Card_Database cdb,JSONArray jsonArray){
-        jsonArray.put(cdb.Card_id);
-        JSONArray cards=new JSONArray();
-        recursive_list_to_json(cards,cdb);
-        JSONObject jo=new JSONObject();
-        jo.put("cards",cards);
-        File cardFile= CustomFile.get_File(pdb.project_id + File.separator + "cards" + File.separator + cdb.Card_id + ".json",Branch_Name);
-        write_str(cardFile,jo.toString());
-    }
-    private void recursive_list_to_json(JSONArray jarray, Card_Database cdb){
-        JSONObject card_obj_j=new JSONObject();
-        card_obj_j.put("name",cdb.Card_name);
-        card_obj_j.put("card_id",cdb.Card_id);
-        card_obj_j.put("mark_data",cdb.mark_data);
-        JSONArray child_array=new JSONArray();
-        for(Card_Database Carddb:cdb.children){
-            recursive_list_to_json(child_array,Carddb);
+        root_object.put("cards",jsonArray);*/
+        Map<String,JSONObject> jomap=new HashMap<>();
+        for(String key:pdb.cards.keySet()){
+            JSONObject joude=new JSONObject();
+            Card_Database cdb2f=pdb.cards.get(key);
+            joude.put("name",cdb2f.Card_name);
+            joude.put("parent",cdb2f.parent_id);
+            joude.put("mark_data",cdb2f.mark_data);
+            jomap.put(key,joude);
         }
-        card_obj_j.put("children",child_array);
-        jarray.put(card_obj_j);
+        root_object.put("cards",jomap);
+        File proj_file=CustomFile.get_File(pdb.project_id + File.separator + "project_meta.json",Branch_Name);
+        if(!proj_file.getParentFile().exists()){
+            Files.createDirectories(proj_file.getParentFile().toPath());
+        }
+        write_str(proj_file,root_object.toString());
     }
 }

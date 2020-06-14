@@ -10,6 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import javax.smartcardio.Card;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class core {
     public Project_Database pdb;
@@ -56,58 +57,27 @@ public class core {
     }
 
     /**
-     * カードを取得します(root)
-     * @param card_id カードid
-     * @return カード
-     */
-    public Card_Database get_card(String card_id){
-        for(Card_Database cdb:pdj.pdb.cards){
-            if(cdb.Card_id.equals(card_id)){
-                return cdb;
-            }
-        }
-        Card_Database cdkun=new Card_Database();
-        cdkun.error=true;
-        return cdkun;
-    }
-
-    /**
      * カードを取得します
      * @param card_id カードid
-     * @param parent_card 親カード
      * @return
      */
-    public Card_Database get_card(String card_id,Card_Database parent_card){
-
-        for(Card_Database cdb:parent_card.children){
-            if(cdb.Card_id.equals(card_id)){
-                return cdb;
-            }
-        }
-
-        Card_Database cdkun=new Card_Database();
-        cdkun.error=true;
-        return cdkun;
+    public Card_Database get_card(String card_id){
+        return pdj.pdb.cards.get(card_id);
     }
 
     /**
      *
      * @param cdb 追加するカード
+     * @return カードid
      */
-    public void Create_Card(Card_Database cdb){
+    public String Create_Card(Card_Database cdb){
 
-        pdj.pdb.cards.add(cdb);
+        String card_id=DigestUtils.md5Hex(cdb.Card_name + Long.toString(System.currentTimeMillis()));
+        pdj.pdb.cards.put(card_id,cdb);
+        return card_id;
     }
 
 
-    /**
-     *
-     * @param cdb 追加するカード
-     * @param parent 親カード
-     */
-    public void Create_Card(Card_Database cdb,Card_Database parent){
-        parent.children.add(cdb);
-    }
     public String to_JSONString(){
         return pdj.To_JsonString();
     }
@@ -118,65 +88,16 @@ public class core {
      * @param Card_id カードid
      */
     public void edit_Card(Card_Database cdb,String Card_id){
-        for(Card_Database cdb2:pdj.pdb.cards){
-            if(cdb2.Card_id.equals(Card_id)){
-                int index=pdj.pdb.cards.indexOf(cdb2);
-                Card_Database cdbdest=new Card_Database();
-                cdbdest.Card_id=Card_id;
-                cdbdest.children=cdb.children;
-                cdbdest.Card_name=cdb.Card_name;
-                cdbdest.mark_data=cdb.mark_data;
-                pdj.pdb.cards.set(index,cdbdest);
-                return;
-            }
-        }
+        pdj.pdb.cards.replace(Card_id,cdb);
     }
 
-    /**
-     * カードをいじります。
-     * @param cdb 変更後
-     * @param Card_id カードid
-     * @param parent 親カード
-     */
-    public void edit_Card(Card_Database cdb,String Card_id,Card_Database parent){
-        for(Card_Database cdb2:parent.children){
-            if(cdb2.Card_id.equals(Card_id)){
-                int index=parent.children.indexOf(cdb2);
-                Card_Database cdbdest=new Card_Database();
-                cdbdest.Card_id=Card_id;
-                cdbdest.children=cdb.children;
-                cdbdest.Card_name=cdb.Card_name;
-                cdbdest.mark_data=cdb.mark_data;
-                parent.children.set(index,cdbdest);
-                return;
-            }
-        }
-    }
 
     /**
      * カードが消えますを
      * @param Card_id カードid
      */
     public void delete_Card(String Card_id){
-        for(Card_Database cdbkun:pdj.pdb.cards){
-            if(cdbkun.Card_id.equals(Card_id)){
-                int indexkun=pdj.pdb.cards.indexOf(cdbkun);
-                pdj.pdb.cards.remove(indexkun);
-            }
-        }
+        pdj.pdb.cards.remove(Card_id);
     }
 
-    /**
-     * カードが消えますを
-     * @param Card_id カードid
-     * @param parent 親カード
-     */
-    public void delete_Card(String Card_id,Card_Database parent){
-        for(Card_Database cdbkun:parent.children){
-            if(cdbkun.Card_id.equals(Card_id)){
-                int indexkun=parent.children.indexOf(cdbkun);
-                parent.children.remove(indexkun);
-            }
-        }
-    }
 }
