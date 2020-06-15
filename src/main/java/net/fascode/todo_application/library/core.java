@@ -10,21 +10,39 @@ import org.apache.commons.codec.digest.DigestUtils;
 import javax.smartcardio.Card;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.Map;
 
 public class core {
+    /**
+     * 知らぬ
+     */
     public Project_Database pdb;
+    /**
+     * JSON管理システム
+     */
     public Project_DB_JSON pdj;
     private String project_name;
     private Project_List_JSON_OnBranch pljo;
     public core(){
         pdb=new Project_Database();
     }
+
+    /**
+     * プロジェクトを読み込みます。
+     * @param Project_ID プロジェクトid
+     * @param Branch_Name ブランチ名
+     */
     public void load_project(String Project_ID,String Branch_Name){
         pdj=new Project_DB_JSON(Project_ID,Branch_Name);
         pdb=pdj.pdb;
     }
 
+    /**
+     * プロジェクトを作成します
+     * @param Project_Name プロジェクト名
+     * @param Branch_Name ブランチ名
+     */
     public void create_project(String Project_Name,String Branch_Name){
         project_name=Project_Name;
         String project_id= DigestUtils.md5Hex(Project_Name + Long.toString(System.currentTimeMillis()));
@@ -38,6 +56,12 @@ public class core {
         pdb.project_id=project_id;
         pdj=new Project_DB_JSON(pdb,Branch_Name);
     }
+
+    /**
+     * プロジェクトを読み込みます(名前で)
+     * @param Project_Name プロジェクト名
+     * @param Branch_Name ブランチ名
+     */
     public void load_project_Name(String Project_Name,String Branch_Name){
         project_name = Project_Name;
         pljo=new Project_List_JSON_OnBranch(Branch_Name);
@@ -48,6 +72,10 @@ public class core {
             }
         }
     }
+
+    /**
+     * プロジェクトを保存します
+     */
     public void save_project()  {
         try {
             pdj.Write_JsonString();
@@ -59,14 +87,14 @@ public class core {
     /**
      * カードを取得します
      * @param card_id カードid
-     * @return
+     * @return カード
      */
     public Card_Database get_card(String card_id){
         return pdj.pdb.cards.get(card_id);
     }
 
     /**
-     *
+     * カードを作成します。
      * @param cdb 追加するカード
      * @return カードid
      */
@@ -77,7 +105,10 @@ public class core {
         return card_id;
     }
 
-
+    /**
+     * JSONを返します。
+     * @return JSON
+     */
     public String to_JSONString(){
         return pdj.To_JsonString();
     }
@@ -88,7 +119,7 @@ public class core {
      * @param Card_id カードid
      */
     public void edit_Card(Card_Database cdb,String Card_id){
-        pdj.pdb.cards.replace(Card_id,cdb);
+        pdj.pdb.cards.replace(Card_id,new Card_Database(cdb));
     }
 
 
@@ -97,7 +128,9 @@ public class core {
      * @param Card_id カードid
      */
     public void delete_Card(String Card_id){
-        pdj.pdb.cards.remove(Card_id);
+        Card_Database cdb2=new Card_Database(pdj.pdb.cards.get(Card_id));
+        cdb2.isremoved=true;
+        pdj.pdb.cards.replace(Card_id,cdb2);
     }
 
 }

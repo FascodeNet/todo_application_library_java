@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.smartcardio.Card;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Card_Database {
     public String Card_name;
@@ -12,6 +13,7 @@ public class Card_Database {
     public boolean isremoved;
     public boolean isopened;
     public boolean error;
+    public Date timestamp;
     public Card_Database(){
         Card_name="";
         mark_data="";
@@ -19,6 +21,20 @@ public class Card_Database {
         isremoved=false;
         error=false;
         isopened=false;
+        timestamp=new Date();
+    }
+
+    /**
+     * 複製コンストラクタ
+     * @param cdb コピー元
+     */
+    public Card_Database(Card_Database cdb){
+        Card_name=cdb.Card_name;
+        mark_data=cdb.mark_data;
+        parent_id=cdb.parent_id;
+        isremoved=cdb.isremoved;
+        timestamp=new Date();
+        isopened=cdb.isopened;
     }
 
     /**
@@ -34,6 +50,8 @@ public class Card_Database {
         isremoved=false;
         error=false;
         isopened=false;
+        timestamp=new Date();
+        new Date();
     }
 
     /**
@@ -50,6 +68,7 @@ public class Card_Database {
         isremoved=false;
         error=false;
         isopened=false;
+        timestamp=new Date();
     }
     /*public Card_Database get_child(String Card_Name){
         for(Card_Database cdkun: children){

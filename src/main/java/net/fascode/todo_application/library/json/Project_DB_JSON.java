@@ -1,5 +1,6 @@
 package net.fascode.todo_application.library.json;
 
+import net.fascode.todo_application.library.Date.JSON_Date;
 import net.fascode.todo_application.library.File.CustomFile;
 import net.fascode.todo_application.library.db.Card_Database;
 import net.fascode.todo_application.library.db.Project_Database;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class Project_DB_JSON {
     /**
      *
      * @param pdb_ Project_Databaseオブジェクト
+     * @param Branch_name ブランチ名
      */
     public Project_DB_JSON(Project_Database pdb_,String Branch_name) {
         pdb = pdb_;
@@ -62,10 +65,12 @@ public class Project_DB_JSON {
                         cdbniki.mark_data=jofdf.getString("mark_data");
                         cdbniki.Card_name=jofdf.getString("name");
                         cdbniki.parent_id=jofdf.getString("parent");
+                        cdbniki.timestamp= JSON_Date.String_to_Date(jofdf.getString("timestamp"));
+
                         cdb4_map.put(jofv_key,cdbniki);
                     }
                     pdb.cards= new HashMap<>(cdb4_map);
-                }catch (IOException e){
+                }catch (IOException | ParseException e){
                     //nothing
                     System.err.println(e.toString());
                 }
@@ -126,6 +131,11 @@ public class Project_DB_JSON {
             cdbkun.parent_id=jo2.getString("parent");
             cdbkun.Card_name=jo2.getString("name");
             cdbkun.mark_data=jo2.getString("mark_data");
+            try {
+                cdbkun.timestamp=JSON_Date.String_to_Date(jo2.getString("timestamp"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             pdb.cards.put(key,cdbkun);
         }
 
@@ -143,6 +153,7 @@ public class Project_DB_JSON {
             jokun.put("name",cdkun.Card_name);
             jokun.put("mark_data",cdkun.mark_data);
             jokun.put("parent",cdkun.parent_id);
+            jokun.put("timestamp",JSON_Date.Date_to_String(cdkun.timestamp));
             jo_map.put(key,jokun);
         }
         root_object.put("cards",jo_map);
@@ -168,6 +179,7 @@ public class Project_DB_JSON {
             joude.put("parent",cdb2f.parent_id);
             joude.put("mark_data",cdb2f.mark_data);
             joude.put("isremoved",cdb2f.isremoved);
+            joude.put("timestamp",JSON_Date.Date_to_String(cdb2f.timestamp));
             jomap.put(key,joude);
         }
         //root_object.put("cards",jomap);

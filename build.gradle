@@ -11,6 +11,10 @@ mainClassName = 'net.fascode.todo_application.library.main.Main'
 repositories {
     mavenCentral()
 }
+javadoc {
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+}
 def defaultEncoding = 'UTF-8'
 tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
 
