@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class Project_DB_JSON {
         try {
             JSONObject root_JO = new JSONObject(readAll(Project_meta_Json));
             pdb.project_id=root_JO.getString("project_id");
-            pdb.project_title=root_JO.getString("project_title");
+            pdb.set_project_title(root_JO.getString("project_title"));
             pdb.Latest_Date=JSON_Date.String_to_Date(root_JO.getString("latest_date"));
             /*JSONObject cardskun=root_JO.getJSONObject("cards");
             for(String key:cardskun.keySet()){
@@ -124,7 +125,7 @@ public class Project_DB_JSON {
         pdb=new Project_Database();
         JSONObject jo=new JSONObject(json_data);
         pdb.project_id=jo.getString("project_id");
-        pdb.project_title=jo.getString("project_title");
+        pdb.set_project_title(jo.getString("project_title"));
         try {
             pdb.Latest_Date=JSON_Date.String_to_Date(jo.getString("latest_date"));
         } catch (ParseException e) {
@@ -149,7 +150,7 @@ public class Project_DB_JSON {
     public String To_JsonString(){
 
         root_object=new JSONObject();
-        root_object.put("project_title",pdb.project_title);
+        root_object.put("project_title",pdb.get_project_title());
         root_object.put("project_id",pdb.project_id);
         root_object.put("latest_date",JSON_Date.Date_to_String(pdb.Latest_Date));
         Card_Database cdkun;
@@ -168,7 +169,7 @@ public class Project_DB_JSON {
     }
     public void  Write_JsonString() throws IOException {
         root_object=new JSONObject();
-        root_object.put("project_title",pdb.project_title);
+        root_object.put("project_title",pdb.get_project_title());
         root_object.put("latest_date",JSON_Date.Date_to_String(pdb.Latest_Date));
         root_object.put("project_id",pdb.project_id);
         if(!CustomFile.get_File(pdb.project_id,Branch_Name).exists()){
@@ -236,5 +237,8 @@ public class Project_DB_JSON {
             Files.createDirectories(proj_file.getParentFile().toPath());
         }
         write_str(proj_file,root_object.toString());
+    }
+    public ArrayList<String> Card_update_ids(Date dt){
+        return pdb.Card_update_ids(dt);
     }
 }

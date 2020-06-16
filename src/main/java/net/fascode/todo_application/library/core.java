@@ -10,6 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import javax.smartcardio.Card;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class core {
         plkun.proj_id=project_id;
         pljo.proj_list.add(plkun);
         pljo.Write_List();
-        pdb.project_title=project_name;
+        pdb.set_project_title(project_name);
         pdb.project_id=project_id;
         pdj=new Project_DB_JSON(pdb,Branch_Name);
     }
@@ -133,6 +134,12 @@ public class core {
         Card_Database cdb2=new Card_Database(pdj.pdb.get_Card_db(Card_id));
         cdb2.isremoved=true;
         pdj.pdb.replace_Card_db(Card_id,cdb2);
+    }
+    public Date get_latesttime(){
+        return pdj.pdb.Latest_Date;
+    }
+    public ArrayList<String> Card_update_ids(Date dt){
+        return pdj.pdb.Card_update_ids(dt);
     }
 
 }

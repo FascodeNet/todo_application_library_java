@@ -5,6 +5,7 @@ import net.fascode.todo_application.library.db.Card_Database;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args){
@@ -26,6 +27,8 @@ public class Main {
 
         //cr.Create_Card(new Card_Database("TEST25t","HOGEAIUEO"),cdkun);
         //cr.edit_Card(new Card_Database("TEST25t","AIUEO810"),cdkun.children.get(0).Card_id,cdkun);
+        Date dt24=cr.get_latesttime();
+
         cr.save_project();
 
 
@@ -38,6 +41,10 @@ public class Main {
         cr2.Create_Card(new Card_Database("hogree","TDNa"));
 
         cr2.save_project();
+        ArrayList<String> strkun=cr2.Card_update_ids(dt24);
+        for(String strniki:strkun){
+            System.out.println(strniki);
+        }
         System.out.println("dest");
         System.out.println(cr2.to_JSONString());
     }

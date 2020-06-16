@@ -4,7 +4,7 @@ import javax.smartcardio.Card;
 import java.util.*;
 
 public class Project_Database {
-    public String project_title;
+    private String project_title;
     public String project_id;
     public Date Latest_Date;
     //public ArrayList<Card_Database> cards;
@@ -59,5 +59,37 @@ public class Project_Database {
             Latest_Date= (Date) cdb.timestamp.clone();
         }
         cards.replace(card_id,cdb);
+    }
+
+    /**
+     * カードの更新日時をもとに、更新が必要なカードのidを返します。
+     * @param dt 相手側の最終更新日時
+     * @return 更新が必要なカードid
+     */
+    public ArrayList<String> Card_update_ids(Date dt){
+        ArrayList<String>  id_collection=new ArrayList<>();
+        for(String key:cards.keySet()){
+            if(cards.get(key).timestamp.after(dt)){
+                id_collection.add(key);
+            }
+        }
+        return id_collection;
+    }
+
+    /**
+     * project_titleを取得
+     * @return project_titleの中身
+     */
+    public String get_project_title(){
+        return project_title;
+    }
+
+    /**
+     * project_titleをセット
+     * @param title セットするオブジェクト
+     */
+    public void set_project_title(String title){
+        project_title=title;
+        Latest_Date=new Date();
     }
 }
