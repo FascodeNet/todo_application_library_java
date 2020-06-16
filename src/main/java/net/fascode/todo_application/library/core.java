@@ -17,11 +17,11 @@ public class core {
     /**
      * 知らぬ
      */
-    public Project_Database pdb;
+    private Project_Database pdb;
     /**
      * JSON管理システム
      */
-    public Project_DB_JSON pdj;
+    private Project_DB_JSON pdj;
     private String project_name;
     private Project_List_JSON_OnBranch pljo;
     public core(){
@@ -90,7 +90,7 @@ public class core {
      * @return カード
      */
     public Card_Database get_card(String card_id){
-        return pdj.pdb.cards.get(card_id);
+        return pdj.pdb.get_Card_db(card_id);
     }
 
     /**
@@ -101,7 +101,7 @@ public class core {
     public String Create_Card(Card_Database cdb){
 
         String card_id=DigestUtils.md5Hex(cdb.Card_name + Long.toString(System.currentTimeMillis()));
-        pdj.pdb.cards.put(card_id,cdb);
+        pdj.pdb.put_card(card_id,cdb);
         return card_id;
     }
 
@@ -119,7 +119,9 @@ public class core {
      * @param Card_id カードid
      */
     public void edit_Card(Card_Database cdb,String Card_id){
-        pdj.pdb.cards.replace(Card_id,new Card_Database(cdb));
+
+        pdj.pdb.replace_Card_db(Card_id,new Card_Database(cdb)
+        );
     }
 
 
@@ -128,9 +130,9 @@ public class core {
      * @param Card_id カードid
      */
     public void delete_Card(String Card_id){
-        Card_Database cdb2=new Card_Database(pdj.pdb.cards.get(Card_id));
+        Card_Database cdb2=new Card_Database(pdj.pdb.get_Card_db(Card_id));
         cdb2.isremoved=true;
-        pdj.pdb.cards.replace(Card_id,cdb2);
+        pdj.pdb.replace_Card_db(Card_id,cdb2);
     }
 
 }

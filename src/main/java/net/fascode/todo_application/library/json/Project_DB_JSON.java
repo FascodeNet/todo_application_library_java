@@ -40,6 +40,7 @@ public class Project_DB_JSON {
             JSONObject root_JO = new JSONObject(readAll(Project_meta_Json));
             pdb.project_id=root_JO.getString("project_id");
             pdb.project_title=root_JO.getString("project_title");
+            pdb.Latest_Date=JSON_Date.String_to_Date(root_JO.getString("latest_date"));
             /*JSONObject cardskun=root_JO.getJSONObject("cards");
             for(String key:cardskun.keySet()){
                 JSONObject jo2=cardskun.getJSONObject(key);
@@ -69,13 +70,13 @@ public class Project_DB_JSON {
 
                         cdb4_map.put(jofv_key,cdbniki);
                     }
-                    pdb.cards= new HashMap<>(cdb4_map);
+                    pdb.set_cards_map(new HashMap<>(cdb4_map));
                 }catch (IOException | ParseException e){
                     //nothing
                     System.err.println(e.toString());
                 }
             });
-        }catch (IOException e){
+        }catch (IOException | ParseException e){
             //nothing
             System.err.println(e.toString());
         }
@@ -124,6 +125,11 @@ public class Project_DB_JSON {
         JSONObject jo=new JSONObject(json_data);
         pdb.project_id=jo.getString("project_id");
         pdb.project_title=jo.getString("project_title");
+        try {
+            pdb.Latest_Date=JSON_Date.String_to_Date(jo.getString("latest_date"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         JSONObject cardskun=jo.getJSONObject("cards");
         for(String key:cardskun.keySet()){
             JSONObject jo2=cardskun.getJSONObject(key);
@@ -136,7 +142,7 @@ public class Project_DB_JSON {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            pdb.cards.put(key,cdbkun);
+            pdb.put_card(key,cdbkun);
         }
 
     }
@@ -145,11 +151,12 @@ public class Project_DB_JSON {
         root_object=new JSONObject();
         root_object.put("project_title",pdb.project_title);
         root_object.put("project_id",pdb.project_id);
+        root_object.put("latest_date",JSON_Date.Date_to_String(pdb.Latest_Date));
         Card_Database cdkun;
         Map<String,JSONObject> jo_map=new HashMap<>();
-        for(String key:pdb.cards.keySet()){
+        for(String key:pdb.get_cards_keyset()){
             JSONObject jokun=new JSONObject();
-            cdkun=pdb.cards.get(key);
+            cdkun=pdb.get_Card_db(key);
             jokun.put("name",cdkun.Card_name);
             jokun.put("mark_data",cdkun.mark_data);
             jokun.put("parent",cdkun.parent_id);
@@ -162,6 +169,7 @@ public class Project_DB_JSON {
     public void  Write_JsonString() throws IOException {
         root_object=new JSONObject();
         root_object.put("project_title",pdb.project_title);
+        root_object.put("latest_date",JSON_Date.Date_to_String(pdb.Latest_Date));
         root_object.put("project_id",pdb.project_id);
         if(!CustomFile.get_File(pdb.project_id,Branch_Name).exists()){
             Files.createDirectories(Paths.get(CustomFile.get_File(pdb.project_id,Branch_Name).toURI()));
@@ -172,9 +180,9 @@ public class Project_DB_JSON {
         }
         root_object.put("cards",jsonArray);*/
         Map<String,JSONObject> jomap=new HashMap<>();
-        for(String key:pdb.cards.keySet()){
+        for(String key:pdb.get_cards_keyset()){
             JSONObject joude=new JSONObject();
-            Card_Database cdb2f=pdb.cards.get(key);
+            Card_Database cdb2f=pdb.get_Card_db(key);
             joude.put("name",cdb2f.Card_name);
             joude.put("parent",cdb2f.parent_id);
             joude.put("mark_data",cdb2f.mark_data);
