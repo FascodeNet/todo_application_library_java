@@ -6,7 +6,7 @@ plugins {
     id 'application'
 }
 group 'net.fascode.todo_application'
-version '0.0.1'
+version '0.0.0.1'
 mainClassName = 'net.fascode.todo_application.library.main.Main'
 repositories {
     mavenCentral()
@@ -26,4 +26,14 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20200518'
     testCompile 'junit:junit:4.+'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.+'
+}
+def repo = new File(rootDir, "repository")
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository url: "file://${repo.absolutePath}"
+        }
+    }
 }
