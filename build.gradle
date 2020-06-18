@@ -4,9 +4,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'maven'
     id 'application'
+    id 'maven-publish'
 }
 group 'net.fascode.todo_application'
-version '0.0.0.1.1'
+version '0.0.0.1.2'
 mainClassName = 'net.fascode.todo_application.library.main.Main'
 repositories {
     mavenCentral()
@@ -34,6 +35,27 @@ uploadArchives {
     repositories {
         mavenDeployer {
             repository url: "file://${repo.absolutePath}"
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "file://${repo.absolutePath}"
         }
     }
 }

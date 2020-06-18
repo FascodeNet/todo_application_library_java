@@ -147,7 +147,7 @@ public class core {
      * @param Branch_name ブランチ名
      * @return プロジェクトリスト
      */
-    public ArrayList<String> Project_List(String Branch_name){
+    public static ArrayList<String> Project_List(String Branch_name){
 
         Project_List_JSON_OnBranch pljo2=new Project_List_JSON_OnBranch(Branch_name);
         return (ArrayList<String>)pljo2.proj_list.clone();
