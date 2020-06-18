@@ -6,7 +6,7 @@ plugins {
     id 'application'
 }
 group 'net.fascode.todo_application'
-version '0.0.0.1'
+version '0.0.0.1.1'
 mainClassName = 'net.fascode.todo_application.library.main.Main'
 repositories {
     mavenCentral()
