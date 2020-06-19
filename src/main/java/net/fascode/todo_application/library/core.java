@@ -38,6 +38,7 @@ public class core {
      */
     public void load_project(String Project_ID,String Branch_Name){
         pdj=new Project_DB_JSON(Project_ID,Branch_Name);
+        project_name=pdj.pdb.get_project_title();
         pdb=pdj.pdb;
     }
 
