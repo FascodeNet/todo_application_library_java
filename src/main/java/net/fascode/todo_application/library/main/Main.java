@@ -20,7 +20,7 @@ public class Main {
                                 new Card_Database("testkun","T E S T")
                         ))),
                 new Card_Database("tets_TDN","やりますねぇ")))));*/
-        Card_Database cdkun=new Card_Database("aiueo","# HOGE");
+        Card_Database cdkun=new Card_Database("aiueo","# 野獣");
         String card_idkunw=cr.Create_Card(cdkun);
         Card_Database cdkun2=new Card_Database("hogehofe","#HHAH",card_idkunw);
         cr.Create_Card(cdkun2);

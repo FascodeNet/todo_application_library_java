@@ -28,7 +28,9 @@ public class core {
     public core(){
         pdb=new Project_Database();
     }
-
+    public String get_proj_name(){
+        return project_name;
+    }
     /**
      * プロジェクトを読み込みます。
      * @param Project_ID プロジェクトid
