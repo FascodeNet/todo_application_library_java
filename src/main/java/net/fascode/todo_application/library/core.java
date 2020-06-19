@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 public class core {
     /**
@@ -40,6 +41,14 @@ public class core {
         pdj=new Project_DB_JSON(Project_ID,Branch_Name);
         project_name=pdj.pdb.get_project_title();
         pdb=pdj.pdb;
+    }
+
+    /**
+     * カードのkeysetの取得
+     * @return keyset
+     */
+    public Set<String> get_cards_keyset(){
+        return pdj.pdb.get_cards_keyset();
     }
 
     /**
