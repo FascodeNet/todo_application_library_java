@@ -39,7 +39,9 @@ public class Project_Database {
     public Set<String> get_cards_keyset(){
         return cards.keySet();
     }
-
+    public Map<String,Card_Database> get_cards(){
+        return cards;
+    }
     /**
      * カードを取得
      * @param key カードid

@@ -50,6 +50,9 @@ public class core {
     public Set<String> get_cards_keyset(){
         return pdj.pdb.get_cards_keyset();
     }
+    public Map<String,Card_Database> get_card_database(){
+        return pdj.pdb.get_cards();
+    }
 
     /**
      * プロジェクトを作成します

@@ -1,11 +1,10 @@
 package net.fascode.todo_application.library.main;
 
+import net.fascode.todo_application.library.comparators.Comparator_Card_Database_HashMap_Timestamp;
 import net.fascode.todo_application.library.core;
 import net.fascode.todo_application.library.db.Card_Database;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args){
@@ -47,5 +46,12 @@ public class Main {
         }
         System.out.println("dest");
         System.out.println(cr2.to_JSONString());
+        Map<String,Card_Database> mapkun=new HashMap<>(cr2.get_card_database());
+        List<Map.Entry<String,Card_Database>> lskun=new ArrayList<Map.Entry<String,Card_Database>>(mapkun.entrySet());
+        Collections.sort(lskun, new Comparator_Card_Database_HashMap_Timestamp().reversed());
+        for(Map.Entry<String, Card_Database> entry : lskun) {
+            System.out.println(entry.getKey() + " : " + entry.getValue().toString());
+        }
+
     }
 }

@@ -1,12 +1,14 @@
 package net.fascode.todo_application.library.db;
 
+import net.fascode.todo_application.library.Date.JSON_Date;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.json.JSONObject;
 
 import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Card_Database {
+public class Card_Database implements Comparable<Card_Database>{
     public String Card_name;
     public String mark_data;
     public String parent_id;
@@ -77,6 +79,23 @@ public class Card_Database {
         isopened=false;
         timestamp=new Date();
         this.owner=owner;
+    }
+
+    @Override
+    public int compareTo(Card_Database o) {
+        return timestamp.compareTo(o.timestamp);
+    }
+
+    @Override
+    public String toString() {
+        JSONObject rootjo=new JSONObject();
+        rootjo.put("name",Card_name);
+        rootjo.put("parent",parent_id);
+        rootjo.put("mark_data",mark_data);
+        rootjo.put("isremoved",isremoved);
+        rootjo.put("timestamp", JSON_Date.Date_to_String(timestamp));
+        rootjo.put("owner",owner);
+        return rootjo.toString();
     }
     /*public Card_Database get_child(String Card_Name){
         for(Card_Database cdkun: children){
