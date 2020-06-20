@@ -1,0 +1,93 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.fascode.todo_application",
+    "module": "todo_application_library_java",
+    "version": "0.0.0.1.5.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.5",
+      "buildId": "kapkl2q3ojcalhdoimdhk25ovi"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.json",
+          "module": "json",
+          "version": {
+            "requires": "20200518"
+          }
+        },
+        {
+          "group": "commons-codec",
+          "module": "commons-codec",
+          "version": {
+            "requires": "1.+"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "todo_application_library_java-0.0.0.1.5.1.jar",
+          "url": "todo_application_library_java-0.0.0.1.5.1.jar",
+          "size": 19590,
+          "sha512": "095ce62f55305a340df08957b97f389a40e00e261600cdfad005cc9e9a160ddc77b14c265be20cbca556c0cfbe5edcf938fab21e35d8c444d44d8c93277c2e7e",
+          "sha256": "566520096283ae4019556f3e495e2b0694a8345e5e2fdde0c2ae0df2b368c081",
+          "sha1": "a35e10f34afdd596a315cbfa7c415b18a4414a5d",
+          "md5": "2d5a0487206dc3468fc3ad37efecf0ca"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.json",
+          "module": "json",
+          "version": {
+            "requires": "20200518"
+          }
+        },
+        {
+          "group": "commons-codec",
+          "module": "commons-codec",
+          "version": {
+            "requires": "1.+"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "todo_application_library_java-0.0.0.1.5.1.jar",
+          "url": "todo_application_library_java-0.0.0.1.5.1.jar",
+          "size": 19590,
+          "sha512": "095ce62f55305a340df08957b97f389a40e00e261600cdfad005cc9e9a160ddc77b14c265be20cbca556c0cfbe5edcf938fab21e35d8c444d44d8c93277c2e7e",
+          "sha256": "566520096283ae4019556f3e495e2b0694a8345e5e2fdde0c2ae0df2b368c081",
+          "sha1": "a35e10f34afdd596a315cbfa7c415b18a4414a5d",
+          "md5": "2d5a0487206dc3468fc3ad37efecf0ca"
+        }
+      ]
+    }
+  ]
+}
