@@ -10,6 +10,7 @@ public class Card_Database {
     public String Card_name;
     public String mark_data;
     public String parent_id;
+    public String owner;
     public boolean isremoved;
     public boolean isopened;
     public boolean error;
@@ -21,6 +22,7 @@ public class Card_Database {
         isremoved=false;
         error=false;
         isopened=false;
+        owner="";
         timestamp=new Date();
     }
 
@@ -35,14 +37,18 @@ public class Card_Database {
         isremoved=cdb.isremoved;
         timestamp=new Date();
         isopened=cdb.isopened;
+        owner=cdb.owner;
     }
-
+    public void change_owner(String owner){
+        this.owner=owner;
+    }
     /**
      * 派生コンストラクタ
      * @param Card_n カード名
      * @param mark_d カードデータ
+     * @param owner 書き込む人
      */
-    public Card_Database(String Card_n,String mark_d){
+    public Card_Database(String Card_n,String mark_d,String owner){
 
         Card_name=Card_n;
         mark_data=mark_d;
@@ -51,16 +57,17 @@ public class Card_Database {
         error=false;
         isopened=false;
         timestamp=new Date();
+        this.owner=owner;
         new Date();
     }
-
     /**
      * 派生コンストラクタ
      * @param Card_n カード名
      * @param mark_d カードデータ
      * @param parent_id 親id
+     * @param owner 書き込む人
      */
-    public Card_Database(String Card_n,String mark_d,String parent_id){
+    public Card_Database(String Card_n,String mark_d,String parent_id,String owner){
 
         Card_name=Card_n;
         mark_data=mark_d;
@@ -69,6 +76,7 @@ public class Card_Database {
         error=false;
         isopened=false;
         timestamp=new Date();
+        this.owner=owner;
     }
     /*public Card_Database get_child(String Card_Name){
         for(Card_Database cdkun: children){

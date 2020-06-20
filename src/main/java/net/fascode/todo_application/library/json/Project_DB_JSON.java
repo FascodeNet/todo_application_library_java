@@ -68,7 +68,7 @@ public class Project_DB_JSON {
                         cdbniki.Card_name=jofdf.getString("name");
                         cdbniki.parent_id=jofdf.getString("parent");
                         cdbniki.timestamp= JSON_Date.String_to_Date(jofdf.getString("timestamp"));
-
+                        cdbniki.owner=jofdf.getString("owner");
                         cdb4_map.put(jofv_key,cdbniki);
                     }
                     pdb.set_cards_map(new HashMap<>(cdb4_map));
@@ -138,6 +138,7 @@ public class Project_DB_JSON {
             cdbkun.parent_id=jo2.getString("parent");
             cdbkun.Card_name=jo2.getString("name");
             cdbkun.mark_data=jo2.getString("mark_data");
+            cdbkun.owner=jo2.getString("owner");
             try {
                 cdbkun.timestamp=JSON_Date.String_to_Date(jo2.getString("timestamp"));
             } catch (ParseException e) {
@@ -162,6 +163,7 @@ public class Project_DB_JSON {
             jokun.put("mark_data",cdkun.mark_data);
             jokun.put("parent",cdkun.parent_id);
             jokun.put("timestamp",JSON_Date.Date_to_String(cdkun.timestamp));
+            jokun.put("owner",cdkun.owner);
             jo_map.put(key,jokun);
         }
         root_object.put("cards",jo_map);
@@ -189,6 +191,7 @@ public class Project_DB_JSON {
             joude.put("mark_data",cdb2f.mark_data);
             joude.put("isremoved",cdb2f.isremoved);
             joude.put("timestamp",JSON_Date.Date_to_String(cdb2f.timestamp));
+            joude.put("owner",cdb2f.owner);
             jomap.put(key,joude);
         }
         //root_object.put("cards",jomap);

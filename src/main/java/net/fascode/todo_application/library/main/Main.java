@@ -20,7 +20,7 @@ public class Main {
                                 new Card_Database("testkun","T E S T")
                         ))),
                 new Card_Database("tets_TDN","やりますねぇ")))));*/
-        Card_Database cdkun=new Card_Database("aiueo","# 野獣");
+        Card_Database cdkun=new Card_Database("aiueo","# 野獣","HOMO");
         String card_idkunw=cr.Create_Card(cdkun);
         Card_Database cdkun2=new Card_Database("hogehofe","#HHAH",card_idkunw);
         cr.Create_Card(cdkun2);
@@ -36,9 +36,9 @@ public class Main {
         core cr2=new core();
         cr2.load_project_Name("testkun621","hoge");
 
-        cr2.Create_Card(new Card_Database("hoge","TDN"));
-        cr2.Create_Card(new Card_Database("hogre","TfDN"));
-        cr2.Create_Card(new Card_Database("hogree","TDNa"));
+        cr2.Create_Card(new Card_Database("hoge","TDN","HAGE"));
+        cr2.Create_Card(new Card_Database("hogre","TfDN","HOMO"));
+        cr2.Create_Card(new Card_Database("hogree","TDNa","SEXUAL"));
 
         cr2.save_project();
         ArrayList<String> strkun=cr2.Card_update_ids(dt24);
